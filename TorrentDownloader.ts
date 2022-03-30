@@ -125,7 +125,7 @@ function extractDetails(page: string): ITorrentDetail | null {
     lists.forEach((ul) => {
         ul.querySelectorAll("li").forEach((li) => {
             const keyElement = li.querySelector("strong");
-            const valueElement = li.querySelector("strong");
+            const valueElement = li.querySelector("span");
             if (!keyElement || !valueElement) return;
             const key = safeTextExtract(keyElement);
             const value = safeTextExtract(valueElement);

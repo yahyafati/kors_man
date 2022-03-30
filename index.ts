@@ -31,9 +31,9 @@ app.get("/details/", async (req: Request, res: Response) => {
         res.status(500).json("No!");
         return;
     }
-    console.log("Queries", req.query.url);
+    // console.log("Queries", req.query.url);
     const details = await getTorrentDetails({ url });
-    console.log("Details", details);
+    // console.log("Details", details);
 
     res.json(details);
 });
