@@ -5,9 +5,8 @@ import {
     search,
     validCategory,
     getTorrentDetails,
-    Torrent,
 } from "./TorrentDownloader";
-import morgan, { Morgan } from "morgan";
+import morgan from "morgan";
 
 dotenv.config();
 const app: Express = express();
@@ -31,10 +30,7 @@ app.get("/details/", async (req: Request, res: Response) => {
         res.status(500).json("No!");
         return;
     }
-    // console.log("Queries", req.query.url);
     const details = await getTorrentDetails({ url });
-    // console.log("Details", details);
-
     res.json(details);
 });
 
