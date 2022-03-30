@@ -7,12 +7,16 @@ import {
     getTorrentDetails,
     Torrent,
 } from "./TorrentDownloader";
+import morgan, { Morgan } from "morgan";
 
 dotenv.config();
 const app: Express = express();
 
+app.use(
+    morgan(":method :url :status :res[content-length] - :response-time ms")
+);
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -20,23 +24,37 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/details/", async (req: Request, res: Response) => {
-    const torrent: Torrent = req.body.torrent;
-    const details = await getTorrentDetails(torrent);
+    const url: string | undefined = req.query.url
+        ? String(req.query.url)
+        : undefined;
+    if (!url) {
+        res.status(500).json("No!");
+        return;
+    }
+    console.log("Queries", req.query.url);
+    const details = await getTorrentDetails({ url });
+    console.log("Details", details);
+
     res.json(details);
 });
 
-app.get("/search/:query", async (req: Request, res: Response) => {
+app.get("/search/:query/:page", async (req: Request, res: Response) => {
     const query: string = req.params.query;
-    const torrents = await search(query);
+    const page: number = Number(req.params.page) || 1;
+    const torrents = await search(query, page);
     res.json(torrents);
 });
 
-app.get("/category/:query/:category", async (req: Request, res: Response) => {
-    const query: string = req.params.query;
-    const category = validCategory(req.params.category);
-    const torrents = await categorySearch(query, category);
-    res.json(torrents);
-});
+app.get(
+    "/category/:category/:query/:page",
+    async (req: Request, res: Response) => {
+        const query: string = req.params.query;
+        const page: number = Number(req.params.page) || 1;
+        const category = validCategory(req.params.category);
+        const torrents = await categorySearch(query, category, page);
+        res.json(torrents);
+    }
+);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));

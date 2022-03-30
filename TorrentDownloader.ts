@@ -135,9 +135,9 @@ function extractDetails(page: string): ITorrentDetail | null {
     return metadata;
 }
 
-export async function getTorrentDetails(
-    torrent: Torrent
-): Promise<ITorrentDetail | {}> {
+export async function getTorrentDetails(torrent: {
+    url: string;
+}): Promise<ITorrentDetail | {}> {
     if (!torrent) return {};
     let torrentURL: string = torrent.url;
     if (torrentURL.startsWith("/")) torrentURL = torrentURL.substring(1);
