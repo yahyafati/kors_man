@@ -1,6 +1,10 @@
 import axios from "axios";
 import { HTMLElement, parse } from "node-html-parser";
 
+const axiosInstance = axios.create({
+    timeout: 1500,
+});
+
 export interface Torrent {
     title: string;
     seed: string;
@@ -141,7 +145,7 @@ export async function getTorrentDetails(torrent: {
     if (!torrent) return {};
     let torrentURL: string = torrent.url;
     if (torrentURL.startsWith("/")) torrentURL = torrentURL.substring(1);
-    const res = await axios.get(`https://1337x.to/${torrentURL}`, {
+    const res = await axiosInstance.get(`https://1337x.to/${torrentURL}`, {
         headers: {
             "Access-Control-Allow-Origin": "*",
         },
@@ -184,7 +188,12 @@ export async function search(
     page: number = 1
 ): Promise<Array<Torrent>> {
     query = formatQuery(query);
-    const res = await axios.get(`https://1337x.to/search/${query}/${page}/`);
+    const res = await axiosInstance.get(
+        `https://1337x.to/search/${query}/${page}/`,
+        {
+            timeout: 15,
+        }
+    );
     return extractSearchResults(res.data);
 }
 
@@ -194,7 +203,7 @@ export async function categorySearch(
     page: number = 1
 ): Promise<Array<Torrent>> {
     query = formatQuery(query);
-    const res = await axios.get(
+    const res = await axiosInstance.get(
         `https://1337x.to/category-search/${query}/${category}/${page}/`
     );
     return extractSearchResults(res.data);

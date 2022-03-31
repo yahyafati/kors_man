@@ -37,14 +37,14 @@ app.get("/details/", async (req: Request, res: Response) => {
         return;
     }
     const details = await getTorrentDetails({ url });
-    res.json(details);
+    res.status(200).json(details);
 });
 
 app.get("/search/:query/:page", async (req: Request, res: Response) => {
     const query: string = req.params.query;
     const page: number = Number(req.params.page) || 1;
     const torrents = await search(query, page);
-    res.json(torrents);
+    res.status(200).json(torrents);
 });
 
 app.get(
@@ -54,7 +54,7 @@ app.get(
         const page: number = Number(req.params.page) || 1;
         const category = validCategory(req.params.category);
         const torrents = await categorySearch(query, category, page);
-        res.json(torrents);
+        res.status(200).json(torrents);
     }
 );
 
