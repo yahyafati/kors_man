@@ -7,6 +7,7 @@ import {
     getTorrentDetails,
 } from "./TorrentDownloader";
 import morgan from "morgan";
+import axios from "axios";
 
 dotenv.config();
 const app: Express = express();
@@ -23,7 +24,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/", async (req: Request, res: Response) => {
-    res.send("Hello, It's working!");
+    const aRes = await axios.get("https://jsonplaceholder.typicode.com/posts");
+    res.json(aRes.data);
 });
 
 app.get("/details/", async (req: Request, res: Response) => {
