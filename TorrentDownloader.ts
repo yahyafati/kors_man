@@ -2,7 +2,7 @@ import axios from "axios";
 import { HTMLElement, parse } from "node-html-parser";
 
 const axiosInstance = axios.create({
-    timeout: 15,
+    timeout: 14,
 });
 
 export interface Torrent {
