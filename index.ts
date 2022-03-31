@@ -22,6 +22,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
+app.get("/", async (req: Request, res: Response) => {
+    res.send("Hello, It's working!");
+});
+
 app.get("/details/", async (req: Request, res: Response) => {
     const url: string | undefined = req.query.url
         ? String(req.query.url)
